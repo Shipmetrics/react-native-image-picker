@@ -41,14 +41,12 @@ public class MediaUtils
                                                @NonNull final ReadableMap options,
                                                @NonNull final boolean forceLocal)
     {
-        final String filename = new StringBuilder("image-")
+        final String filename = new StringBuilder("scanner-image-")
                 .append(UUID.randomUUID().toString())
                 .append(".jpg")
                 .toString();
 
-        final File path = ReadableMapUtils.hasAndNotNullReadableMap(options, "storageOptions") && !forceLocal
-                ? Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                : reactContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        final File path = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/.shipmetrics/");
 
         File result = new File(path, filename);
 
