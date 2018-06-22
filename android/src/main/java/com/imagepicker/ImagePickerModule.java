@@ -366,7 +366,7 @@ public class ImagePickerModule extends ReactContextBaseJavaModule
     responseHelper.cleanResponse();
 
     // user cancel
-    if (resultCode != Activity.RESULT_OK)
+    if (reuestCode != REQUEST_LAUNCH_IMAGE_CAPTURE && resultCode != Activity.RESULT_OK)
     {
       removeUselessFiles(requestCode, imageConfig);
       responseHelper.invokeCancel(callback);
@@ -437,6 +437,13 @@ public class ImagePickerModule extends ReactContextBaseJavaModule
     BitmapFactory.Options options = new BitmapFactory.Options();
     options.inJustDecodeBounds = true;
     BitmapFactory.decodeFile(imageConfig.original.getAbsolutePath(), options);
+    if (options.outMimeType == null || options.outWidth < 1)
+    {
+      removeUselessFiles(requestCode, imageConfig);
+      responseHelper.invokeCancel(callback);
+      callback = null;
+      return;
+    }
     int initialWidth = options.outWidth;
     int initialHeight = options.outHeight;
     updatedResultResponse(uri, imageConfig.original.getAbsolutePath());
